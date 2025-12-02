@@ -12,9 +12,15 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            await github.rest.issues.addAssignees({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              assignees: ['koreanpanda345']
-            });
+            try {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                assignees: ['koreanpanda345']
+              });
+              console.log('Successfully assigned issue to koreanpanda345');
+            } catch (error) {
+              console.log(`Failed to assign issue: ${error.message}`);
+              core.setFailed(`Failed to assign issue: ${error.message}`);
+            }
